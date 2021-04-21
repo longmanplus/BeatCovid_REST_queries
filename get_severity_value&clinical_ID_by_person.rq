@@ -1,0 +1,35 @@
+PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#> 
+PREFIX owl:     <http://www.w3.org/2002/07/owl#> 
+PREFIX dct:  <http://purl.org/dc/terms/> 
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX ncit:    <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#> 
+PREFIX sio:     <http://semanticscience.org/resource/> 
+PREFIX prov: <http://http://http://www.w3.org/ns/prov#>
+
+# Get the severity score value and the clinical id of a person
+
+SELECT DISTINCT ?severity_score_value ?clinical_id WHERE {
+    # Get the roles that person plays
+    person a sio:SIO_000776;
+            sio:SIO_000228 ?patient_role.
+
+    # Get the severity score evaluation process of the patient role that person plays
+    ?patient_role a obo:OBI_0000093;
+            sio:SIO_000356 ?severity_score_evaluation_process. 
+
+    # Get the severity score answer of the patient role that person plays
+    ?severity_score_evaluation_process a obo:CMO_0001109;
+            sio:SIO_000229 ?severity_score_answer. 
+
+    # Get the severity score value of the patient role that person plays
+    ?severity_score_answer a ncit:NCIT_C175280;
+            sio:SIO_000300 ?severity_score_value. 
+    
+    # Get the clinical id of the patient role that person plays
+    OPTIONAL { 
+    ?id_node a obo:NCIT_C164337;        
+             sio:SIO_000300 ?clinical_id;        
+             obo:IAO_0000219 ?patient_role.
+    }    
+}

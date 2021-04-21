@@ -1,0 +1,32 @@
+# LUMC prefixes
+PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#> 
+PREFIX owl:     <http://www.w3.org/2002/07/owl#> 
+PREFIX dct:  <http://purl.org/dc/terms/> 
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX ncit:    <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#> 
+PREFIX sio:     <http://semanticscience.org/resource/> 
+PREFIX prov: <http://http://http://www.w3.org/ns/prov#>
+
+# Get the location (hosptial_value, ward_value) of a patient by clinical ID
+
+SELECT DISTINCT ?hosptial_value ?ward_value WHERE {
+
+    # Get all the denoted objects of a clinical ID
+    ?id_node a obo:NCIT_C164337;        
+             sio:SIO_000300 id;        
+             obo:IAO_0000219 ?patient_role.
+
+   # Get the denoted paitent role of the clinical ID
+    ?patient_role a obo:OBI_0000093.
+
+    # Get all ward and hosptial of the patient role
+    ?patient_role obo:RO_0001025 ?ward;
+            obo:RO_0001025 ?hospital.
+
+    ?ward obo:BFO_0000050 ?hospital.
+
+    ?ward sio:SIO_000300 ?ward_value.
+    ?hosptial sio:SIO_000300 ?hosptial_value.
+}
