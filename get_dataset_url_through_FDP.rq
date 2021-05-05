@@ -1,15 +1,19 @@
 prefix dcat:     <http://www.w3.org/ns/dcat#> 
 prefix obo: <http://purl.obolibrary.org/obo/>
+prefix sio: <http://semanticscience.org/resource/>
 
-# Get the accessURL of a dataset of "type" = "Medical", 
-# "DUO (Data Use Ontology) is restricted to" = "COVID19", 
-# "RO (Relation Ontology) has quality" = "synthetic quality"
+# Get the access URLs of all distributions of the dataset that meet the property constraints :
+#     DCAT : "type" =  NCI Thesaurus (NCIT) OBO Edition : "Medical", 
+#     DUO (Data Use Ontology) : "is restricted to" = Mondo Disease Ontology (Mondo) : "COVID-19", 
+#     RO (Relation Ontology) : "has quality" = Semanticscience Integrated Ontology (SIO) :"synthetic quality" 
 
 SELECT DISTINCT ?accessURL WHERE { 
-    ?beatcovid_dataset a dct:Dataset ;
-        dct:type obo:NCIT_C25261 ;
-        obo:DUO_0000010 obo:MONDO_0100096 ;
-        obo:RO_0000086 SIO_001410 ;
-        dct:distribution ?beatcovid_dataset_dist .
 
-    ?beatcovid_dataset_dist dct:accessURL ?accessURL .
+    ?beatcovid_dataset a dcat:Dataset ;
+        dcat:type obo:NCIT_C25261 ;
+        obo:DUO_0000010 obo:MONDO_0100096 ;
+        obo:RO_0000086 sio:SIO_001410 ;
+        dcat:distribution ?beatcovid_dataset_dist .
+
+    ?beatcovid_dataset_dist dcat:accessURL ?accessURL .
+}
