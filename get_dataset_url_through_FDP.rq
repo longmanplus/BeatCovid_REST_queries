@@ -1,7 +1,9 @@
 prefix dcat:     <http://www.w3.org/ns/dcat#> 
 prefix obo: <http://purl.obolibrary.org/obo/>
 
-# Get the accessURL of a dataset of "Medical", "COVID19", "synthetic quality"
+# Get the accessURL of a dataset of "type" = "Medical", 
+# "DUO (Data Use Ontology) is restricted to" = "COVID19", 
+# "RO (Relation Ontology) has quality" = "synthetic quality"
 
 SELECT DISTINCT ?accessURL WHERE { 
     ?beatcovid_dataset a dct:Dataset ;
@@ -11,5 +13,3 @@ SELECT DISTINCT ?accessURL WHERE {
         dct:distribution ?beatcovid_dataset_dist .
 
     ?beatcovid_dataset_dist dct:accessURL ?accessURL .
-}
-
