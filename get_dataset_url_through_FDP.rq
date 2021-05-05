@@ -1,0 +1,15 @@
+prefix dcat:     <http://www.w3.org/ns/dcat#> 
+prefix obo: <http://purl.obolibrary.org/obo/>
+
+# Get the accessURL of a dataset of "Medical", "COVID19", "synthetic quality"
+
+SELECT DISTINCT ?accessURL WHERE { 
+    ?beatcovid_dataset a dct:Dataset ;
+        dct:type obo:NCIT_C25261 ;
+        obo:DUO_0000010 obo:MONDO_0100096 ;
+        obo:RO_0000086 SIO_001410 ;
+        dct:distribution ?beatcovid_dataset_dist .
+
+    ?beatcovid_dataset_dist dct:accessURL ?accessURL .
+}
+
