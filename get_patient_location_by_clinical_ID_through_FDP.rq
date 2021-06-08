@@ -35,7 +35,7 @@ SELECT DISTINCT ?hosptial_value ?ward_value WHERE {
 SERVICE ?accessURL {
       # Get all the denoted objects of a clinical ID
       ?id_node a obo:NCIT_C164337;
-               sio:SIO_000300 ?_clinical-id;
+               sio:SIO_000300 ?_clinicalId;
                obo:IAO_0000219 ?patient_role.
 
      # Get the denoted paitent role of the clinical ID
