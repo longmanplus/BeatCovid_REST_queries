@@ -20,16 +20,16 @@ PREFIX prov: <http://http://http://www.w3.org/ns/prov#>
 SELECT DISTINCT ?severity_score_value ?clinical_id WHERE {
 
 ?beatcovid_dataset a dcat:Dataset ;
-    dcat:type _type ;
-    obo:DUO_0000010 _use ;
-    obo:RO_0000086 _relation ;
+    dcat:type ?_type ;
+    obo:DUO_0000010 ?_use ;
+    obo:RO_0000086 ?_relation ;
     dcat:distribution ?beatcovid_dataset_dist .
 
 ?beatcovid_dataset_dist dcat:accessURL ?accessURL .
 
 SERVICE ?accessURL {
       # Get the roles that person plays
-      person a sio:SIO_000776;
+      ?_person a sio:SIO_000776;
               sio:SIO_000228 ?patient_role.
 
       # Get the severity score evaluation process of the patient role that person plays
