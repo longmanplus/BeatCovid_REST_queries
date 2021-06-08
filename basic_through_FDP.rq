@@ -22,11 +22,10 @@ PREFIX prov: <http://http://http://www.w3.org/ns/prov#>
 SELECT DISTINCT ?cytokine
 WHERE {
 
-
 ?beatcovid_dataset a dcat:Dataset ;
-    dcat:type ?_type ;
-    obo:DUO_0000010 ?_use ;
-    obo:RO_0000086 ?_relation ;
+    dcat:type ?_type_iri ;
+    obo:DUO_0000010 ?_use_iri ;
+    obo:RO_0000086 ?_relation_iri ;
     dcat:distribution ?beatcovid_dataset_dist .
 
 ?beatcovid_dataset_dist dcat:accessURL ?accessURL .
