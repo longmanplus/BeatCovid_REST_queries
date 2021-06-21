@@ -3,8 +3,9 @@
 #+ description: Get the location (hosptial_value, ward_value) of a patient from a Covid-19 synthetic dataset found via a FDP by clinical ID.
 #+ defaults:
 #+   - type: http://purl.obolibrary.org/obo/NCIT_C25261
-#+   - use: http://purl.obolibrary.org/obo/MONDO_0100096
-#+   - relation: http://semanticscience.org/resource/SIO_001410
+#+   - describes: http://purl.obolibrary.org/obo/MONDO_0100096
+#+   - dataInputOf: http://purl.obolibrary.org/obo/NCIT_C15206
+#+   - hasQuality: http://semanticscience.org/resource/SIO_001410
 
 
 # LUMC prefixes
@@ -13,41 +14,47 @@ PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
 PREFIX owl:     <http://www.w3.org/2002/07/owl#>
-PREFIX dct:  <http://purl.org/dc/terms/>
-PREFIX obo: <http://purl.obolibrary.org/obo/>
-PREFIX ncit:    <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#>
+PREFIX dct:     <http://purl.org/dc/terms/>
+PREFIX obo:     <http://purl.obolibrary.org/obo/>
+PREFIX afo:     <http://purl.allotrope.org/ontologies/property#>
 PREFIX sio:     <http://semanticscience.org/resource/>
-PREFIX prov: <http://http://http://www.w3.org/ns/prov#>
+PREFIX prov:    <http://http://http://www.w3.org/ns/prov#>
+PREFIX bco:     <http://purl.org/beat-covid/cytokines-semantic-model.owl#>
 
-# Get the location (hosptial_value, ward_value) of a patient by clinical ID
+# Get the location (ICUQId, hospitalId) of a patient by clinical ID
 
-SELECT DISTINCT ?hosptial_value ?ward_value WHERE {
+SELECT DISTINCT ?ICUQId ?hospitalId WHERE {
 
-?beatcovid_dataset a dcat:Dataset ;
-    dcat:type ?_type_iri ;
-    obo:DUO_0000010 ?_use_iri ;
-    obo:RO_0000086 ?_relation_iri ;
-    dcat:distribution ?beatcovid_dataset_dist .
+    ?beatcovid_dataset a dcat:Dataset ;
+                      dcat:type ?_type_iri ;
+                      afo:AFX_0002699 ?_describes_iri ;
+                      afo:AFX_0000553 ?_dataInputOf_iri ;
+                      obo:RO_0000086 ?_hasQuality_iri ;
+                      dcat:distribution ?beatcovid_dataset_dist .
 
-?beatcovid_dataset_dist dcat:accessURL ?accessURL .
+    ?beatcovid_dataset_dist a dcat:Distribution ;
+                            dcat:accessURL ?accessURL .
 
+    SERVICE ?accessURL {
 
-SERVICE ?accessURL {
-      # Get all the denoted objects of a clinical ID
-      ?id_node a obo:NCIT_C164337;
-               sio:SIO_000300 ?_clinicalId;
-               obo:IAO_0000219 ?patient_role.
+        ?person_patient_id a bco:clinical_id;
+                          sio:SIO_000300 ?_clinicalId;
+                          obo:IAO_0000219 ?person_patient_role.
 
-     # Get the denoted paitent role of the clinical ID
-      ?patient_role a obo:OBI_0000093.
+        ?person a sio:SIO_000498 ;
+                sio:SIO_000228 ?person_patient_role ;
+                sio:SIO_000228 ?person_study_role .
 
-      # Get all ward and hosptial of the patient role
-      ?patient_role obo:RO_0001025 ?ward;
-              obo:RO_0001025 ?hospital.
+        ?person_study_id a bco:beat_covid_id ;
+                       obo:IAO_0000219 ?person_study_role ;
+                       obo:RO_0001025 ?ICUQ .
 
-      ?ward obo:BFO_0000050 ?hospital.
+        ?ICUQ a obo:NCIT_C21541 ;
+              sio:SIO_000300 ?ICUQId ;
+              obo:BFO_0000050 ?hospital .
 
-      ?ward sio:SIO_000300 ?ward_value.
-      ?hosptial sio:SIO_000300 ?hosptial_value.
-    }
+        ?hospital a sio:SIO_000688 ;
+                  sio:SIO_000300 ?hospitalId .
+
+        }
 }

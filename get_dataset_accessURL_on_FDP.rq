@@ -3,25 +3,29 @@
 #+ description: Get access URLs of all distributions of a dataset that meet the property constraints.
 #+ defaults:
 #+   - type: http://purl.obolibrary.org/obo/NCIT_C25261
-#+   - use: http://purl.obolibrary.org/obo/MONDO_0100096
-#+   - relation: http://semanticscience.org/resource/SIO_001410
+#+   - describes: http://purl.obolibrary.org/obo/MONDO_0100096
+#+   - dataInputOf: http://purl.obolibrary.org/obo/NCIT_C15206
+#+   - hasQuality: http://semanticscience.org/resource/SIO_001410
 
 prefix dcat:     <http://www.w3.org/ns/dcat#>
 prefix obo: <http://purl.obolibrary.org/obo/>
-prefix sio: <http://semanticscience.org/resource/>
+prefix afo: <http://purl.allotrope.org/ontologies/property#>
 
 # Get the access URLs of all distributions of a dataset that meet the property constraints :
-#     DCAT : "type" =  NCI Thesaurus (NCIT) OBO Edition : "Medical",
-#     DUO (Data Use Ontology) : "is restricted to" = Mondo Disease Ontology (Mondo) : "COVID-19",
+#     DCAT : "type" =  NCI Thesaurus (NCIT) OBO Edition : "Knowledge Base",
+#     AFO (Allotrope Merged Ontology SuiteAFO) : "describes" = Mondo Disease Ontology (Mondo) : "COVID-19",
+#                                              : "data input of" = NCI Thesaurus (NCIT) OBO Edition : "Clinical Study"
 #     RO (Relation Ontology) : "has quality" = Semanticscience Integrated Ontology (SIO) :"synthetic quality"
 
 SELECT DISTINCT ?accessURL WHERE {
 
     ?beatcovid_dataset a dcat:Dataset ;
         dcat:type ?_type_iri ;
-        obo:DUO_0000010 ?_use_iri ;
-        obo:RO_0000086 ?_relation_iri ;
+        afo:AFX_0002699 ?_describes_iri ;
+        afo:AFX_0000553 ?_dataInputOf_iri ;
+        obo:RO_0000086 ?_hasQuality_iri ;
         dcat:distribution ?beatcovid_dataset_dist .
 
-    ?beatcovid_dataset_dist dcat:accessURL ?accessURL .
+        ?beatcovid_dataset_dist a dcat:Distribution ;
+                                dcat:accessURL ?accessURL .
 }

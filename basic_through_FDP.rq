@@ -3,8 +3,9 @@
 #+ description: Get count number of patients in a Covid-19 synthetic dataset found via a FDP.
 #+ defaults:
 #+   - type: http://purl.obolibrary.org/obo/NCIT_C25261
-#+   - use: http://purl.obolibrary.org/obo/MONDO_0100096
-#+   - relation: http://semanticscience.org/resource/SIO_001410
+#+   - describes: http://purl.obolibrary.org/obo/MONDO_0100096
+#+   - dataInputOf: http://purl.obolibrary.org/obo/NCIT_C15206
+#+   - hasQuality: http://semanticscience.org/resource/SIO_001410
 
 # Prefixes
 prefix dcat:     <http://www.w3.org/ns/dcat#>
@@ -14,23 +15,25 @@ PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
 PREFIX owl:     <http://www.w3.org/2002/07/owl#>
 PREFIX dct:  <http://purl.org/dc/terms/>
 PREFIX obo: <http://purl.obolibrary.org/obo/>
-PREFIX ncit:    <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#>
+PREFIX afo:     <http://purl.allotrope.org/ontologies/property#>
 PREFIX sio:     <http://semanticscience.org/resource/>
 PREFIX prov: <http://http://http://www.w3.org/ns/prov#>
 
 # Retrieve all cytokines measured in the LUMC hospital
-SELECT DISTINCT ?cytokine
-WHERE {
+SELECT DISTINCT ?cytokine_iri
+    WHERE {
 
-?beatcovid_dataset a dcat:Dataset ;
-    dcat:type ?_type_iri ;
-    obo:DUO_0000010 ?_use_iri ;
-    obo:RO_0000086 ?_relation_iri ;
-    dcat:distribution ?beatcovid_dataset_dist .
+    ?beatcovid_dataset a dcat:Dataset ;
+                      dcat:type ?_type_iri ;
+                      afo:AFX_0002699 ?_describes_iri ;
+                      afo:AFX_0000553 ?_dataInputOf_iri ;
+                      obo:RO_0000086 ?_hasQuality_iri ;
+                      dcat:distribution ?beatcovid_dataset_dist .
 
-?beatcovid_dataset_dist dcat:accessURL ?accessURL .
+    ?beatcovid_dataset_dist a dcat:Distribution ;
+                            dcat:accessURL ?accessURL .
 
-SERVICE ?accessURL {
-	?cytokine rdf:type obo:OBI_0000070 .
-	}
-}
+    SERVICE ?accessURL {
+    	   ?cytokine_iri a sio:SIO_010043 .
+    	}
+    }
