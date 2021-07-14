@@ -20,7 +20,7 @@ SELECT ?patient_id
        ?scale_min
        ?scale_max WHERE {
 
-    patient_id a bco:clinical_id  ;
+    ?patient_id a bco:clinical_id  ;
                obo:IAO_0000219 ?person_patient_role .
 
     ?person_patient_role a sio:SIO_000715 ;
