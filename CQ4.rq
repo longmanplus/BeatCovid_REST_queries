@@ -43,5 +43,5 @@ SELECT ?patient_id
 
     ?severity_score_result_scale a obo:NCIT_C25664 ;
                                  obo:LABO_0000118 ?scale_min ;
-							                   obo:LABO_0000119 ?scale_max .
+				 obo:LABO_0000119 ?scale_max .
 }
